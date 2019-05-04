@@ -1,6 +1,7 @@
 {
   "name": "purescript-sketch",
   "version": "1.0.0",
+  "license": "MIT",
   "ignore": [
     "**/.*",
     "node_modules",
