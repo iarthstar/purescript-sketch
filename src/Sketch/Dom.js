@@ -7,7 +7,6 @@ exports["_getDocuments"] = function () {
 };
 
 exports["_getSelectedDocument"] = function () {
-    console.log(dom.getSelectedDocument().pages[0].layers);
     return dom.getSelectedDocument();
 };
 
