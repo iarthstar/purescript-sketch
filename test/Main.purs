@@ -7,14 +7,23 @@ import Data.Either (Either(..))
 import Effect (Effect)
 import Effect.Console (logShow)
 import Sketch.Dom as Dom
-import Sketch.Types (GroupLayer(..), ImageLayer(..), Layer(..), ShapeLayer(..), TextLayer(..))
+import Sketch.Types (GroupLayer(..), ImageLayer(..), Layer(..), ShapeLayer(..), TextLayer(..), ArtboardLayer(..), Theme(..), Document(..))
 import Sketch.UI as UI
 
 main :: Effect Unit
 main = do
+  Dom.getSelectedDocument >>= case _ of
+    Left err -> UI.message "Something went wrong..."
+    Right (Document doc) -> do
+      UI.alert "Selected Document ID" doc.id
+  
+  UI.getTheme >>= UI.alert "Theme" <<< case _ of
+    LIGHT -> "Light"
+    DARK -> "Dark"
+
   selection <- Dom.selectedLayers
   case selection of
-    Left err -> UI.message "Something went wrong..."
+    Left err -> UI.alert "" "Something went wrong..."
     Right layers -> do
       if length layers == 0
         then UI.alert "No Selection" "Please select a layer and try again..."
@@ -27,4 +36,5 @@ main = do
             Image (ImageLayer il) -> il.name
             Shape (ShapeLayer sl) -> sl.name
             Group (GroupLayer gl) -> gl.name
+            Artboard (ArtboardLayer gl) -> gl.name
       show index <> ". " <> name

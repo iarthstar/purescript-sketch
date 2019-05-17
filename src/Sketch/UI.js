@@ -17,3 +17,7 @@ exports["message"] = function(text) {
     return {};  
   };
 };
+
+exports["_getTheme"] = function() {
+    return ui.getTheme().toUpperCase(); 
+};

@@ -7,6 +7,34 @@ import Data.Newtype (class Newtype)
 import Foreign.Class (class Decode, class Encode, decode)
 import Foreign.Generic (defaultOptions, genericDecode, genericEncode)
 
+data Theme = LIGHT | DARK 
+
+newtype Document = Document
+  { type  :: String
+  , id    :: String
+  , pages :: Array Page
+  , path  :: Maybe String
+  }
+derive instance newtypeDocument :: Newtype Document _
+derive instance genericDocument :: Generic Document _
+instance encodeDocument :: Encode Document where encode = genericEncode (defaultOptions { unwrapSingleConstructors = true })
+instance decodeDocument :: Decode Document where decode = genericDecode (defaultOptions { unwrapSingleConstructors = true })
+
+
+newtype Page = Page
+  { type     :: String
+  , id       :: String
+  , frame    :: Frame
+  , name     :: String
+  , selected :: Boolean
+  , layers   :: Array Layer
+  }
+derive instance newtypePage :: Newtype Page _
+derive instance genericPage :: Generic Page _
+instance encodePage :: Encode Page where encode = genericEncode (defaultOptions { unwrapSingleConstructors = true })
+instance decodePage :: Decode Page where decode = genericDecode (defaultOptions { unwrapSingleConstructors = true })
+
+
 newtype Frame = Frame
   { x      :: Number
   , y      :: Number
@@ -18,8 +46,10 @@ derive instance genericFrame :: Generic Frame _
 instance encodeFrame :: Encode Frame where encode = genericEncode (defaultOptions { unwrapSingleConstructors = true })
 instance decodeFrame :: Decode Frame where decode = genericDecode (defaultOptions { unwrapSingleConstructors = true })
 
+
 data Layer 
-  = Text TextLayer 
+  = Artboard ArtboardLayer 
+  | Text TextLayer 
   | Image ImageLayer
   | Shape ShapeLayer
   | Group GroupLayer
@@ -28,10 +58,27 @@ derive instance genericLayer :: Generic Layer _
 instance encodeLayer :: Encode Layer where encode = genericEncode (defaultOptions { unwrapSingleConstructors = true })
 instance decodeLayer :: Decode Layer where 
   decode str 
-    = (Text <$> (decode str))
+    = (Artboard <$> (decode str))
+    <|> (Text <$> (decode str))
     <|> (Image <$> (decode str))
     <|> (Shape <$> (decode str))
     <|> (Group <$> (decode str))
+
+
+newtype ArtboardLayer = ArtboardLayer
+  { type          :: String
+  , id            :: String
+  , frame         :: Frame
+  , name          :: String
+  , selected      :: Boolean
+  , exportFormats :: Array ExportFormat
+  , background    :: Background
+  , layers        :: Array Layer
+  }
+derive instance newtypeArtboardLayer :: Newtype ArtboardLayer _
+derive instance genericArtboardLayer :: Generic ArtboardLayer _
+instance encodeArtboardLayer :: Encode ArtboardLayer where encode x = genericEncode (defaultOptions { unwrapSingleConstructors = true }) x
+instance decodeArtboardLayer :: Decode ArtboardLayer where decode x = genericDecode (defaultOptions { unwrapSingleConstructors = true }) x
 
 
 newtype TextLayer = TextLayer
@@ -250,3 +297,25 @@ derive instance newtypePoint :: Newtype Point _
 derive instance genericPoint :: Generic Point _
 instance encodePoint :: Encode Point where encode = genericEncode (defaultOptions { unwrapSingleConstructors = true })
 instance decodePoint :: Decode Point where decode = genericDecode (defaultOptions { unwrapSingleConstructors = true })
+
+
+newtype ExportFormat = ExportFormat
+  { type       :: String
+  , fileFormat :: String
+  , size       :: String
+  }
+derive instance newtypeExportFormat :: Newtype ExportFormat _
+derive instance genericExportFormat :: Generic ExportFormat _
+instance encodeExportFormat :: Encode ExportFormat where encode = genericEncode (defaultOptions { unwrapSingleConstructors = true })
+instance decodeExportFormat :: Decode ExportFormat where decode = genericDecode (defaultOptions { unwrapSingleConstructors = true })
+
+
+newtype Background = Background
+  { enabled          :: Boolean 
+  , includedInExport :: Boolean
+  , color            :: String
+  }
+derive instance newtypeBackground :: Newtype Background _
+derive instance genericBackground :: Generic Background _
+instance encodeBackground :: Encode Background where encode = genericEncode (defaultOptions { unwrapSingleConstructors = true })
+instance decodeBackground :: Decode Background where decode = genericDecode (defaultOptions { unwrapSingleConstructors = true })
