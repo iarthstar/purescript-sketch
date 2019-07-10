@@ -10,6 +10,22 @@ exports["_getSelectedDocument"] = function () {
     return dom.getSelectedDocument();
 };
 
-exports["selection"] = function () {
+exports["_getSelection"] = function () {
     return dom.getSelectedDocument().selectedLayers.layers;
 };
+
+exports["setPropsForLayerID"] = function (id) {
+    return function (path) {
+        return function (data) {
+            return function () {
+                var layer = dom.getSelectedDocument().getLayerWithID(id);
+                try {
+                    eval("layer." + path.join(".") + " = data;");
+                } catch (e) {
+                        console.log(e.message);
+                }
+                return {};
+            }
+        }
+    }
+}

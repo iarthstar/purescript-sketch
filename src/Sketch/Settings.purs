@@ -1,10 +1,17 @@
-module Sketch.Settings where
-  
+module Sketch.Settings 
+    ( globalSettingForKey
+    , setGlobalSettingForKey
+    , settingForKey
+    , setSettingForKey
+    , sessionVariable
+    , setSessionVariable
+    ) where
+
 import Prelude
 
 import Effect (Effect)
 import Foreign (Foreign)
-  
+
 foreign import globalSettingForKey :: String -> Effect Foreign
 foreign import setGlobalSettingForKey :: forall a. String -> a -> Effect Unit
 

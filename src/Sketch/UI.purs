@@ -1,4 +1,8 @@
-module Sketch.UI where
+module Sketch.UI 
+  ( alert
+  , message
+  , getTheme
+  ) where
 
 import Prelude
 

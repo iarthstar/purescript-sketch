@@ -4,10 +4,13 @@ import Prelude
 
 import Data.Array (foldl, length, mapWithIndex)
 import Data.Either (Either(..))
+import Data.Traversable (traverse)
 import Effect (Effect)
 import Effect.Console (logShow)
+import Foreign.Class (encode)
+import Sketch.Dom (setPropsForLayerID)
 import Sketch.Dom as Dom
-import Sketch.Types (GroupLayer(..), ImageLayer(..), Layer(..), ShapeLayer(..), TextLayer(..), ArtboardLayer(..), Theme(..), Document(..))
+import Sketch.Types (ArtboardLayer(..), Document(..), GroupLayer(..), ImageLayer(..), Layer(..), Shadow, ShapeLayer(..), TextLayer(..), Theme(..))
 import Sketch.UI as UI
 
 main :: Effect Unit
@@ -21,13 +24,14 @@ main = do
     LIGHT -> "Light"
     DARK -> "Dark"
 
-  selection <- Dom.selectedLayers
-  case selection of
+  Dom.selectedLayers >>= case _ of
     Left err -> UI.alert "" "Something went wrong..."
     Right layers -> do
       if length layers == 0
         then UI.alert "No Selection" "Please select a layer and try again..."
-        else logShow $ foldl (\a b -> a <> b) "" $ mapWithIndex parseLayers layers
+        else do
+          _ <- traverse setProps layers
+          logShow $ foldl (\a b -> a <> b) "" $ mapWithIndex parseLayers layers
   where
     parseLayers :: Int -> Layer -> String
     parseLayers index layer = do
@@ -38,3 +42,13 @@ main = do
             Group (GroupLayer gl) -> gl.name
             Artboard (ArtboardLayer gl) -> gl.name
       show index <> ". " <> name
+
+    setProps :: Layer -> Effect Unit
+    setProps layer = do
+      let id = case layer of
+            Text (TextLayer tl) -> tl.id
+            Image (ImageLayer il) -> il.id
+            Shape (ShapeLayer sl) -> sl.id
+            Group (GroupLayer gl) -> gl.id
+            Artboard (ArtboardLayer gl) -> gl.id
+      setPropsForLayerID id ["style", "shadows"] (encode ([] :: Array Shadow))

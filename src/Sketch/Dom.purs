@@ -1,4 +1,9 @@
-module Sketch.Dom where
+module Sketch.Dom 
+  ( getDocuments
+  , getSelectedDocument
+  , selectedLayers
+  , setPropsForLayerID
+  ) where
   
 import Prelude
 
@@ -11,7 +16,9 @@ import Sketch.Types (Document, Layer)
 
 foreign import _getDocuments :: Effect Foreign
 foreign import _getSelectedDocument :: Effect Foreign
-foreign import selection :: Effect Foreign
+foreign import _getSelection :: Effect Foreign
+
+foreign import setPropsForLayerID :: String -> Array String -> Foreign -> Effect Unit
 
 getDocuments :: Effect (Either String (Array Document))
 getDocuments = do
@@ -29,7 +36,7 @@ getSelectedDocument = do
 
 selectedLayers :: Effect (Either String (Array Layer))
 selectedLayers = do
-  (layersF :: F (Array Layer)) <- decode <$> selection
+  (layersF :: F (Array Layer)) <- decode <$> _getSelection
   pure $ case runExcept layersF of
     Left err -> Left "Error Fetching Selection"
     Right layers -> Right layers
