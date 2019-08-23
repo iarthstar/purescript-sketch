@@ -1,5 +1,7 @@
 # purescript-sketch
 
+[![Build Status](https://travis-ci.com/iarthstar/purescript-sketch.svg?branch=feature%2FgetInputFromUser)](https://travis-ci.com/iarthstar/purescript-sketch)
+
 Sketch Javascript API wrapper for development of Sketch Plugin using PureScript
 
 ## Add purescript-sketch to your existing plugin projects
