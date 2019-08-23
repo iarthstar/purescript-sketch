@@ -4,17 +4,21 @@ import Prelude
 
 import Data.Array (foldl, length, mapWithIndex)
 import Data.Either (Either(..))
+import Data.Maybe (Maybe(..))
 import Data.Traversable (traverse)
 import Effect (Effect)
 import Effect.Console (logShow)
-import Foreign.Class (encode)
 import Sketch.Dom (setPropsForLayerID)
 import Sketch.Dom as Dom
-import Sketch.Types (ArtboardLayer(..), Document(..), GroupLayer(..), ImageLayer(..), Layer(..), Shadow, ShapeLayer(..), TextLayer(..), Theme(..))
+import Sketch.Types (ArtboardLayer(..), Document(..), GroupLayer(..), ImageLayer(..), InputType(..), Layer(..), Shadow, ShapeLayer(..), TextLayer(..), Theme(..))
 import Sketch.UI as UI
 
 main :: Effect Unit
 main = do
+  UI.getInputFromUser "Question" (SELECTION ["Yes", "No"] "Choose from down" Nothing) >>= case _ of
+    Left err -> UI.message "Something went wrong..."
+    Right (ans :: String) -> UI.alert "Answer" ans 
+
   Dom.getSelectedDocument >>= case _ of
     Left err -> UI.message "Something went wrong..."
     Right (Document doc) -> do
@@ -25,7 +29,7 @@ main = do
     DARK -> "Dark"
 
   Dom.selectedLayers >>= case _ of
-    Left err -> UI.alert "" "Something went wrong..."
+    Left err -> UI.message "Something went wrong..."
     Right layers -> do
       if length layers == 0
         then UI.alert "No Selection" "Please select a layer and try again..."
@@ -51,4 +55,4 @@ main = do
             Shape (ShapeLayer sl) -> sl.id
             Group (GroupLayer gl) -> gl.id
             Artboard (ArtboardLayer gl) -> gl.id
-      setPropsForLayerID id ["style", "shadows"] (encode ([] :: Array Shadow))
+      setPropsForLayerID id ["style", "shadows"] ([] :: Array Shadow)
