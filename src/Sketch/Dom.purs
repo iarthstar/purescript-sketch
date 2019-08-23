@@ -7,36 +7,28 @@ module Sketch.Dom
   
 import Prelude
 
-import Control.Monad.Except (runExcept)
-import Data.Either (Either(..))
+import Data.Either (Either)
+import Data.List.Types (NonEmptyList)
 import Effect (Effect)
-import Foreign (F, Foreign)
-import Foreign.Class (decode)
+import Foreign (Foreign, ForeignError)
+import Foreign.Class (class Encode, encode)
 import Sketch.Types (Document, Layer)
+import Sketch.Utils (runExceptDecode)
 
 foreign import _getDocuments :: Effect Foreign
 foreign import _getSelectedDocument :: Effect Foreign
 foreign import _getSelection :: Effect Foreign
 
-foreign import setPropsForLayerID :: String -> Array String -> Foreign -> Effect Unit
+foreign import _setPropsForLayerID :: String -> Array String -> Foreign -> Effect Unit
 
-getDocuments :: Effect (Either String (Array Document))
-getDocuments = do
-  (documentsF :: F (Array Document)) <- decode <$> _getDocuments
-  pure $ case runExcept documentsF of
-    Left err -> Left "Error fetching Documents"
-    Right documents -> Right documents
+setPropsForLayerID :: forall a. Encode a => String -> Array String -> a -> Effect Unit
+setPropsForLayerID id path val = _setPropsForLayerID id path (encode val)
 
-getSelectedDocument :: Effect (Either String Document)
-getSelectedDocument = do
-  (documentF :: F Document) <- decode <$> _getSelectedDocument
-  pure $ case runExcept documentF of
-    Left err -> Left "Error fetching selected Document"
-    Right document -> Right document
+getDocuments :: Effect (Either (NonEmptyList ForeignError) (Array Document))
+getDocuments = runExceptDecode _getDocuments
 
-selectedLayers :: Effect (Either String (Array Layer))
-selectedLayers = do
-  (layersF :: F (Array Layer)) <- decode <$> _getSelection
-  pure $ case runExcept layersF of
-    Left err -> Left "Error Fetching Selection"
-    Right layers -> Right layers
+getSelectedDocument :: Effect (Either (NonEmptyList ForeignError) Document)
+getSelectedDocument = runExceptDecode _getSelectedDocument
+
+selectedLayers :: Effect (Either (NonEmptyList ForeignError) (Array Layer))
+selectedLayers = runExceptDecode _getSelection
