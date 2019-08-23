@@ -2,19 +2,19 @@
 
 var dom = require('sketch/dom');
 
-exports["_getDocuments"] = function () {
+exports._getDocuments = function () {
     return dom.getDocuments();
 };
 
-exports["_getSelectedDocument"] = function () {
+exports._getSelectedDocument = function () {
     return dom.getSelectedDocument();
 };
 
-exports["_getSelection"] = function () {
+exports._getSelection = function () {
     return dom.getSelectedDocument().selectedLayers.layers;
 };
 
-exports["setPropsForLayerID"] = function (id) {
+exports._setPropsForLayerID = function (id) {
     return function (path) {
         return function (data) {
             return function () {
@@ -22,7 +22,7 @@ exports["setPropsForLayerID"] = function (id) {
                 try {
                     eval("layer." + path.join(".") + " = data;");
                 } catch (e) {
-                        console.log(e.message);
+                    console.log(e.message);
                 }
                 return {};
             }

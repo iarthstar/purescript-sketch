@@ -1,13 +1,25 @@
 module Sketch.Types where
   
-import Control.Alt ((<$>), (<|>))
+import Prelude
+
+import Control.Alt ((<|>))
 import Data.Generic.Rep (class Generic)
 import Data.Maybe (Maybe)
 import Data.Newtype (class Newtype)
 import Foreign.Class (class Decode, class Encode, decode)
 import Foreign.Generic (defaultOptions, genericDecode, genericEncode)
 
-data Theme = LIGHT | DARK 
+data Theme 
+  = LIGHT 
+  | DARK 
+
+data InputType 
+  = STRING String String (Maybe Int)
+  | SELECTION (Array String) String (Maybe String)
+
+derive instance genericInputType :: Generic InputType _
+instance encodeInputType :: Encode InputType where encode = genericEncode (defaultOptions)
+
 
 newtype Document = Document
   { type  :: String
@@ -78,8 +90,7 @@ newtype ArtboardLayer = ArtboardLayer
 derive instance newtypeArtboardLayer :: Newtype ArtboardLayer _
 derive instance genericArtboardLayer :: Generic ArtboardLayer _
 instance encodeArtboardLayer :: Encode ArtboardLayer where encode x = genericEncode (defaultOptions { unwrapSingleConstructors = true }) x
-instance decodeArtboardLayer :: Decode ArtboardLayer where decode x = genericDecode (defaultOptions { unwrapSingleConstructors = true }) x
-
+instance decodeArtboardLayer :: Decode ArtboardLayer where decode = genericDecode (defaultOptions { unwrapSingleConstructors = true })
 
 newtype TextLayer = TextLayer
   { type        :: String
@@ -112,6 +123,7 @@ newtype TextStyle = TextStyle
   , textTransform     :: String
   , fontFamily        :: String
   , fontWeight        :: Number
+  , shadows           :: Maybe (Array Shadow)
   }
 derive instance newtypeTextStyle :: Newtype TextStyle _
 derive instance genericTextStyle :: Generic TextStyle _
@@ -132,13 +144,14 @@ newtype GroupLayer = GroupLayer
 derive instance newtypeGroupLayer :: Newtype GroupLayer _
 derive instance genericGroupLayer :: Generic GroupLayer _
 instance encodeGroupLayer :: Encode GroupLayer where encode x = genericEncode (defaultOptions { unwrapSingleConstructors = true }) x
-instance decodeGroupLayer :: Decode GroupLayer where decode x = genericDecode (defaultOptions { unwrapSingleConstructors = true }) x
+instance decodeGroupLayer :: Decode GroupLayer where decode = genericDecode (defaultOptions { unwrapSingleConstructors = true })
 
 
 newtype GroupStyle = GroupStyle
   { type    :: String
   , id      :: String
   , opacity :: Number
+  , shadows :: Maybe (Array Shadow)
   }
 derive instance newtypeGroupStyle :: Newtype GroupStyle _
 derive instance genericGroupStyle :: Generic GroupStyle _
@@ -166,6 +179,7 @@ newtype ImageStyle = ImageStyle
   { type    :: String
   , id      :: String
   , opacity :: Number
+  , shadows :: Maybe (Array Shadow)
   }
 derive instance newtypeImageStyle :: Newtype ImageStyle _
 derive instance genericImageStyle :: Generic ImageStyle _

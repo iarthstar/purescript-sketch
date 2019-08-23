@@ -2,46 +2,47 @@
 
 var settings = require('sketch/settings');
 
-exports["globalSettingForKey"] = function (key) {
+exports._globalSettingForKey = function (key) {
     return function () {
         return settings.globalSettingForKey(key);
     }
 }
 
-exports["setGlobalSettingForKey"] = function (key) {
+exports._setGlobalSettingForKey = function (key) {
     return function (data) {
         return function() {
-            settings.setGlobalSettingForKey(key, data);
+            
+            settings.setGlobalSettingForKey(key, data != "undefined" ? data : {} );
             return {};
         }
     }
 }
 
-exports["settingForKey"] = function (key) {
+exports._settingForKey = function (key) {
     return function () {
         return settings.settingForKey(key);
     }
 }
 
-exports["setSettingForKey"] = function (key) {
+exports._setSettingForKey = function (key) {
     return function (data) {
         return function() {
-            settings.setSettingForKey(key, data);
+            settings.setSettingForKey(key, data != "undefined" ? data : {} );
             return {};
         }
     }
 }
 
-exports["sessionVariable"] = function (key) {
+exports._sessionVariable = function (key) {
     return function () {
         return settings.sessionVariable(key);
     }
 }
 
-exports["setSessionVariable"] = function (key) {
+exports._setSessionVariable = function (key) {
     return function (data) {
         return function() {
-            settings.setSessionVariable(key, data);
+            settings.setSessionVariable(key, data != "undefined" ? data : {} );
             return {};
         }
     }
