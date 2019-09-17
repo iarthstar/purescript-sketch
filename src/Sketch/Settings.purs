@@ -1,14 +1,13 @@
-module Sketch.Settings 
-    ( globalSettingForKey
-    , setGlobalSettingForKey
-    , settingForKey
-    , setSettingForKey
-    , sessionVariable
-    , setSessionVariable
-    ) where
+module Sketch.Settings
+  ( globalSettingForKey
+  , setGlobalSettingForKey
+  , settingForKey
+  , setSettingForKey
+  , sessionVariable
+  , setSessionVariable
+  ) where
 
 import Prelude
-
 import Data.Either (Either)
 import Data.List.Types (NonEmptyList)
 import Effect (Effect)
@@ -17,11 +16,15 @@ import Foreign.Class (class Decode, class Encode, encode)
 import Sketch.Utils (runExceptDecode)
 
 foreign import _setGlobalSettingForKey :: String -> Foreign -> Effect Unit
+
 foreign import _setSettingForKey :: String -> Foreign -> Effect Unit
+
 foreign import _setSessionVariable :: String -> Foreign -> Effect Unit
 
 foreign import _globalSettingForKey :: String -> Effect Foreign
+
 foreign import _settingForKey :: String -> Effect Foreign
+
 foreign import _sessionVariable :: String -> Effect Foreign
 
 globalSettingForKey :: forall a. Decode a => String -> Effect (Either (NonEmptyList ForeignError) a)

@@ -5,7 +5,7 @@ require("regenerator-runtime/runtime");
 var ui = require('sketch/ui');
 
 const doSomethingAsync = async function(message,inputType, cb) {
-    let options = {}
+    var options = {}
     if (inputType.tag == "STRING"){
         options = {
             type : ui.INPUT_TYPE.string,
@@ -51,7 +51,7 @@ exports._getTheme = function () {
 exports._getInputFromUser = function (message) {
     return function (inputType) {
         return function (onError, onSuccess) {
-            let cancel = doSomethingAsync(message, inputType, function (err, res) {
+            var cancel = doSomethingAsync(message, inputType, function (err, res) {
                 if (err) {
                     onError(res);
                 } else {

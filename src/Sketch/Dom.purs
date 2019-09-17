@@ -1,12 +1,11 @@
-module Sketch.Dom 
+module Sketch.Dom
   ( getDocuments
   , getSelectedDocument
   , selectedLayers
   , setPropsForLayerID
   ) where
-  
-import Prelude
 
+import Prelude
 import Data.Either (Either)
 import Data.List.Types (NonEmptyList)
 import Effect (Effect)
@@ -16,7 +15,9 @@ import Sketch.Types (Document, Layer)
 import Sketch.Utils (runExceptDecode)
 
 foreign import _getDocuments :: Effect Foreign
+
 foreign import _getSelectedDocument :: Effect Foreign
+
 foreign import _getSelection :: Effect Foreign
 
 foreign import _setPropsForLayerID :: String -> Array String -> Foreign -> Effect Unit
