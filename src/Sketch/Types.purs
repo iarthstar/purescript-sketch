@@ -313,7 +313,7 @@ newtype Fill
   = Fill
   { fill :: String
   , color :: String
-  , gradient :: Gradient
+  , gradient :: Maybe Gradient
   , enabled :: Boolean
   }
 
@@ -406,7 +406,7 @@ instance decodeGradient :: Decode Gradient where
 
 newtype Stop
   = Stop
-  { position :: Int
+  { position :: Number
   , color :: String
   }
 
