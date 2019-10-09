@@ -35,7 +35,8 @@ main = do
 
 ## Example Plugins
 
-* [Copy Paste Shadows](https://github.com/iarthstar/copy-paste-shadows)
+* [Shadows-Utilities](https://github.com/iarthstar/Shadows-Utilities)
+* [Image2Palette](https://github.com/iarthstar/Image2Palette)
 
 ## Want to Develop Plugin
 
