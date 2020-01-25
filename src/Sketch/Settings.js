@@ -2,48 +2,14 @@
 
 var settings = require('sketch/settings');
 
-exports._globalSettingForKey = function (key) {
-    return function () {
-        return settings.globalSettingForKey(key);
-    }
-}
+exports._globalSettingForKey = key => () => settings.globalSettingForKey(key);
 
-exports._setGlobalSettingForKey = function (key) {
-    return function (data) {
-        return function() {
-            
-            settings.setGlobalSettingForKey(key, data != "undefined" ? data : {} );
-            return {};
-        }
-    }
-}
+exports._setGlobalSettingForKey = key => data => () => settings.setGlobalSettingForKey(key, data || {} );
 
-exports._settingForKey = function (key) {
-    return function () {
-        return settings.settingForKey(key);
-    }
-}
+exports._settingForKey = key => () => settings.settingForKey(key);
 
-exports._setSettingForKey = function (key) {
-    return function (data) {
-        return function() {
-            settings.setSettingForKey(key, data != "undefined" ? data : {} );
-            return {};
-        }
-    }
-}
+exports._setSettingForKey = key => data => () => settings.setSettingForKey(key, data || {} );
 
-exports._sessionVariable = function (key) {
-    return function () {
-        return settings.sessionVariable(key);
-    }
-}
+exports._sessionVariable = key => () => settings.sessionVariable(key);
 
-exports._setSessionVariable = function (key) {
-    return function (data) {
-        return function() {
-            settings.setSessionVariable(key, data != "undefined" ? data : {} );
-            return {};
-        }
-    }
-}
+exports._setSessionVariable = key => data => () => settings.setSessionVariable(key, data || {} );
