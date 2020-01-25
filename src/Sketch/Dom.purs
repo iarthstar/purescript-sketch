@@ -2,6 +2,7 @@ module Sketch.Dom
   ( getDocuments
   , getSelectedDocument
   , selectedLayers
+  , getLayerWithID
   , setPropsForLayerID
   ) where
 
