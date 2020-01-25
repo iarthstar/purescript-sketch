@@ -2,30 +2,20 @@
 
 var dom = require('sketch/dom');
 
-exports._getDocuments = function () {
-    return dom.getDocuments();
-};
+exports._getDocuments = () => dom.getDocuments();
 
-exports._getSelectedDocument = function () {
-    return dom.getSelectedDocument();
-};
+exports._getSelectedDocument = () => dom.getSelectedDocument();
 
-exports._getSelection = function () {
-    return dom.getSelectedDocument().selectedLayers.layers;
-};
+exports._getSelection = () => dom.getSelectedDocument().selectedLayers.layers;
 
-exports._setPropsForLayerID = function (id) {
-    return function (path) {
-        return function (data) {
-            return function () {
-                var layer = dom.getSelectedDocument().getLayerWithID(id);
-                try {
-                    eval("layer." + path.join(".") + " = data;");
-                } catch (e) {
-                    console.log(e.message);
-                }
-                return {};
-            }
-        }
+exports._getLayerWithID = id => () => dom.getLayerWithID(id);
+
+exports._setPropsForLayerID = id => path => data => () => {
+    var layer = dom.getSelectedDocument().getLayerWithID(id);
+    try {
+        eval("layer." + path.join(".") + " = data;");
+    } catch (e) {
+        console.log(e.message);
     }
+    return {};
 }
