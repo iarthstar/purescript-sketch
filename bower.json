@@ -24,7 +24,8 @@
     "purescript-effect": "latest",
     "purescript-foreign": "latest",
     "purescript-foreign-generic": "latest",
-    "purescript-aff": "latest"
+    "purescript-aff": "latest",
+    "purescript-profunctor-lenses": "^6.2.0"
   },
   "devDependencies": {
     "purescript-psci-support": "latest"

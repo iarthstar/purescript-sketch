@@ -4,11 +4,13 @@ import Prelude
 
 import Data.Array (foldl, length, mapWithIndex)
 import Data.Either (Either(..))
+import Data.Lens ((^.))
 import Data.Maybe (Maybe(..))
 import Data.Traversable (traverse)
 import Effect (Effect)
 import Effect.Console (logShow)
-import Sketch.Dom (setPropsForLayerID)
+import Sketch.Accessors (_id)
+import Sketch.Dom (setPropsForLayer)
 import Sketch.Dom as Dom
 import Sketch.Types (ArtboardLayer(..), Document(..), GroupLayer(..), ImageLayer(..), InputType(..), Layer(..), Shadow, ShapeLayer(..), TextLayer(..), Theme(..))
 import Sketch.UI as UI
@@ -21,8 +23,7 @@ main = do
 
   Dom.getSelectedDocument >>= case _ of
     Left err -> UI.message "Something went wrong..."
-    Right (Document doc) -> do
-      UI.alert "Selected Document ID" doc.id
+    Right doc -> UI.alert "Selected Document ID" $ doc ^. _id
   
   UI.getTheme >>= UI.alert "Theme" <<< case _ of
     LIGHT -> "Light"
@@ -48,11 +49,4 @@ main = do
       show index <> ". " <> name
 
     setProps :: Layer -> Effect Unit
-    setProps layer = do
-      let id = case layer of
-            Text (TextLayer tl) -> tl.id
-            Image (ImageLayer il) -> il.id
-            Shape (ShapeLayer sl) -> sl.id
-            Group (GroupLayer gl) -> gl.id
-            Artboard (ArtboardLayer gl) -> gl.id
-      setPropsForLayerID id ["style", "shadows"] ([] :: Array Shadow)
+    setProps l = setPropsForLayer l ["style", "shadows"] ([] :: Array Shadow)
