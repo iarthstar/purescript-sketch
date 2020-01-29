@@ -10,7 +10,7 @@ exports._getSelection = () => dom.getSelectedDocument().selectedLayers.layers;
 
 exports._getLayerWithID = id => () => dom.getLayerWithID(id);
 
-exports._setPropsForLayerID = id => path => data => () => {
+exports._setPropsForLayer = ({ id }) => path => data => () => {
     var layer = dom.getSelectedDocument().getLayerWithID(id);
     try {
         eval("layer." + path.join(".") + " = data;");

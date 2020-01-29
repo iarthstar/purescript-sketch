@@ -3,7 +3,7 @@ module Sketch.Dom
   , getSelectedDocument
   , selectedLayers
   , getLayerWithID
-  , setPropsForLayerID
+  , setPropsForLayer
   ) where
 
 import Prelude
@@ -23,7 +23,7 @@ foreign import _getSelection :: Effect Foreign
 
 foreign import _getLayerWithID :: String -> Effect Foreign
 
-foreign import _setPropsForLayerID :: String -> Array String -> Foreign -> Effect Unit
+foreign import _setPropsForLayer :: Foreign -> Array String -> Foreign -> Effect Unit
 
 
 -- | A method to help find the first layer in this document which has the given id.
@@ -32,8 +32,8 @@ getLayerWithID = runExceptDecode <<< _getLayerWithID
 
 
 -- | A method to set value for the path in layer in this document which has the given id.
-setPropsForLayerID :: forall a. Encode a => String -> Array String -> a -> Effect Unit
-setPropsForLayerID id path val = _setPropsForLayerID id path (encode val)
+setPropsForLayer :: forall a. Encode a => Layer -> Array String -> a -> Effect Unit
+setPropsForLayer layer path val = _setPropsForLayer (encode layer) path (encode val)
 
 
 -- | Access all the open Documents.
