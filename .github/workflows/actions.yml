@@ -23,14 +23,15 @@ jobs:
               env:
                 GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
-            # - name: Installing Dependencies
-            #   run: |
-            #     npm install -g purescript bower pulp
-            #     npm install --production
-            #     bower install --production
+            - name: Installing Dependencies
+              run: |
+                npm install -g purescript bower pulp
+                npm install --production
+                bower install --production
 
-            # - name: Building Project
-            #   run: pulp build
+            - name: Building Project
+              run: pulp build
             
             - name: Publishing to Pursuit
-              run: echo "HELLO WORLD..."
+              run: |
+                echo ${{ GITHUB_TOKEN }}
