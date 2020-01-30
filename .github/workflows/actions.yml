@@ -20,8 +20,9 @@ jobs:
               uses: actions/setup-node@v1
               with:
                  node-version: ${{ matrix.node_version }}
+                 repo-token: ${{ secrets.GITHUB_TOKEN }}
               env:
-                GH_TOKEN: ${{ secrets.GH_TOKEN }}
+                GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Installing Dependencies
               run: |
@@ -34,4 +35,4 @@ jobs:
             
             - name: Publishing to Pursuit
               run: |
-                echo ${{ GITHUB_TOKEN }}
+                echo $GH_TOKEN ${{ secrets.GITHUB_TOKEN }} $repo-token
