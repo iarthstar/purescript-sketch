@@ -1,0 +1,45 @@
+name: CI
+
+on:
+    push:
+        branches:
+            - master
+
+jobs:
+    install:
+        name: Installing Dependencies on node ${{ matrix.node_version }} and ${{ matrix.os }}
+        runs-on: ${{ matrix.os }}
+        strategy:
+            matrix:
+                node_version: ["8", "10", "12"]
+                os: [ubuntu-latest]
+
+        steps:
+            - uses: actions/checkout@v1
+            - name: Use Node.js ${{ matrix.node_version }}
+              uses: actions/setup-node@v1
+              with:
+                 node-version: ${{ matrix.node_version }}
+
+            - name: npm i && bower i
+              run: |
+                npm install -g purescript bower pulp
+                npm install --production
+                bower install --production
+
+    build:
+        name: Building on node ${{ matrix.node_version }} and ${{ matrix.os }}
+        runs-on: ${{ matrix.os }}
+        strategy:
+            matrix:
+                node_version: ["8", "10", "12"]
+                os: [ubuntu-latest]
+
+        steps:
+            - uses: actions/checkout@v1
+            - name: Use Node.js ${{ matrix.node_version }}
+              uses: actions/setup-node@v1
+              with:
+                  node-version: ${{ matrix.node_version }}
+            - name: build
+            - run: pulp build
