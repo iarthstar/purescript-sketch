@@ -7,7 +7,7 @@ on:
 
 jobs:
     install:
-        name: Installing Dependencies on node ${{ matrix.node_version }} and ${{ matrix.os }}
+        name: Installing and Building Dependencies on node ${{ matrix.node_version }} and ${{ matrix.os }}
         runs-on: ${{ matrix.os }}
         strategy:
             matrix:
@@ -27,20 +27,6 @@ jobs:
                 npm install --production
                 bower install --production
 
-    build:
-        name: Building on node ${{ matrix.node_version }} and ${{ matrix.os }}
-        runs-on: ${{ matrix.os }}
-        strategy:
-            matrix:
-                node_version: ["12"]
-                os: [ubuntu-latest]
-
-        steps:
-            - uses: actions/checkout@v1
-            - name: Use Node.js ${{ matrix.node_version }}
-              uses: actions/setup-node@v1
-              with:
-                 node-version: ${{ matrix.node_version }}
-
             - name: build
               run: pulp build
+            
