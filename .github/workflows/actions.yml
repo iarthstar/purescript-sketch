@@ -34,6 +34,4 @@ jobs:
             
             - name: Publishing to Pursuit
               run: |
-                echo $GH_TOKEN  | pulp login
-                pulp version $(grep '"version":' bower.json -m1 | cut -d\" -f4)
-                printf 'y\ny\n' | pulp publish
+                echo $GH_TOKEN 
